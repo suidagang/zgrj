@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <style>
+        .listBox{
+            width: 300px;
+            height: 50px;
+            line-height: 50px;
+            overflow: hidden;
+        }
+        .l{
+            float:left;
+        }
+        .r{
+            float:right;
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+        <h2>学生信息登记</h2>
+        <br>
+        <div>
+            <label>姓名：</label>
+            <input type="text" placeholder="请输入姓名" id="name">
+        </div>
+        <div>
+            <label>性别：</label>
+            <input id="sex01" type="radio" value="1" name="sex">
+            <label for="sex01">男</label>
+            <input id="sex02" type="radio" value="2" name="sex">
+            <label for="sex02">女</label>
+        </div>
+        <div>
+            <label>年龄：</label>
+            <select id="age">
+                <option selected>18</option>
+                <option>19</option>
+                <option>20</option>
+                <option>21</option>
+            </select>
+        </div>
+        <div>
+            <label>党员：</label>
+            <input type="checkbox" id="member">
+        </div>
+        <br>
+        <button id="btnCommit" onclick="commit()">提交</button>
+        <button id="btnReset" onclick="reset()">重置</button>
+        <br>
+        <br>
+        <label id="result"></label>
+        <div><h2>增删查改功能对比</h2></div>
+        <div id="listData"></div>
+        <div style="height: 30px;width: 90px;line-height: 30px;text-align: center;border: 1px solid #ccc;border-radius: 3px;cursor: pointer;" onclick="addList()">增加</div>
+    </div>
+    <script type="text/javascript">
+        function commit() {
+            var name = $('#name').val(); 
+            var sex = '';
+            if (getChackedValue('input[name=sex]') == 1){
+                sex = '男'
+            }else if (getChackedValue('input[name=sex]') == 2){
+                sex = '女'
+            }
+            var age = $('#age').val();
+            var member = '';
+            if($('#member').is(':checked')) {
+                member = '党员';
+            }else {
+                member = "非党员";
+            }
+            var result = name + ' ' + sex + ' ' + age + ' ' + member;
+            $('#result').text(result);
+        }
+        function reset() {
+            $('#result').text('');
+        }
+        function getChackedValue (CheckboxId) {
+            var value = 0;
+            var i = 0;
+            $(CheckboxId).each(function () {
+                if($(CheckboxId).eq(i).is(':checked')){
+                    value = $(CheckboxId).eq(i).val(); 
+                   return;
+                }
+                i++;
+            });
+            return value;
+        }
+        var listData = [1,2,3,4];
+        var html = '';
+        for(var i = 0;i<listData.length;i++){
+            html += '<div class="listBox">';
+            html += '<div class="l">'+listData[i]+'</div>';
+            html += '<div class="r">X</div></div>';
+        }
+        $("#listData").append(html);
+        function deleteList(e){
+            console.log(e.target)
+        }
+        window.onload=function(){
+            $('#listData').on('click','.r',function(){
+                $(this).parents('.listBox').remove();
+                //$(this).parent().parent().remove(); 同上
+                //parent() parents()的区别就是前者获取的只有它的上一级元素
+                //后者把它的所有上级元素都获取了，不过可以明确指定获取哪一级
+            });
+        };
+        function addList(){
+            var lastNum = listData[listData.length-1]+1; 
+            var addHtml = '<div class="listBox"><div class="l">'+lastNum+'</div><div class="r">X</div></div>';
+            $("#listData").append(addHtml);
+        }
+        //同window.onload
+        $(document).ready(function () {
+            console.log("加载完成");
+        });
+    </script>
+</body>
+</html>
